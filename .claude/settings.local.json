@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install:*)",
+      "WebFetch(domain:pris.ly)",
+      "WebFetch(domain:www.prisma.io)",
+      "Bash(npx prisma db push)",
+      "Bash(npm ls:*)",
+      "WebSearch",
+      "Bash(npx shadcn@latest init -d)",
+      "Bash(npx shadcn@latest add:*)",
+      "Bash(npm run build:*)",
+      "WebFetch(domain:supabase.com)",
+      "Bash(npx @anthropic-ai/mcp-test playwright navigate:*)",
+      "WebFetch(domain:wavespeed.ai)",
+      "Bash(npx playwright test --list)",
+      "Bash(echo.:*)",
+      "Bash(npx tsc:*)",
+      "Bash(find:*)"
+    ]
+  }
+}

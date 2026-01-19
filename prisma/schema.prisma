@@ -1,0 +1,301 @@
+generator client {
+  provider = "prisma-client"
+  output   = "./generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// Roles del sistema
+enum Role {
+  USER
+  ADMIN
+  MODERATOR
+}
+
+// Estado de transacciones
+enum TransactionType {
+  PURCHASE
+  USAGE
+  REFUND
+  BONUS
+}
+
+// Estado de generación
+enum ImageStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  CANCELED
+  PAST_DUE
+  TRIALING
+  PAUSED
+}
+
+// Tipo de cupón
+enum CouponType {
+  SYSTEM    // Cupón del sistema/admin
+  AFFILIATE // Cupón de afiliado/revendedor
+}
+
+// Estado de comisión
+enum CommissionStatus {
+  PENDING   // Pendiente de pago
+  PAID      // Pagada
+  CANCELED  // Cancelada
+}
+
+// Usuario (compatible con Auth.js)
+model User {
+  id                      String    @id @default(uuid())
+  email                   String    @unique
+  name                    String?
+  avatarUrl               String?
+  role                    Role      @default(USER)
+  credits                 Int       @default(100)
+  password                String?
+  emailVerified           DateTime?
+  verificationCode        String?
+  verificationCodeExpires DateTime?
+  referredById            String?
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
+
+  accounts     Account[]
+  images       Image[]
+  transactions Transaction[]
+  collections  Collection[]
+  subscription Subscription?
+  affiliate    Affiliate?
+  referredBy   Affiliate?   @relation("ReferredUsers", fields: [referredById], references: [id])
+  couponUses   CouponUse[]
+
+  @@index([referredById])
+  @@map("users")
+}
+
+// Cuenta OAuth (Auth.js)
+model Account {
+  id                String  @id @default(uuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+  @@map("accounts")
+}
+
+// Imágenes generadas
+model Image {
+  id             String      @id @default(uuid())
+  userId         String
+  prompt         String
+  negativePrompt String?
+  imageUrl       String
+  thumbnailUrl   String?
+  width          Int
+  height         Int
+  model          String
+  status         ImageStatus @default(PENDING)
+  creditsUsed    Int         @default(1)
+  isPublic       Boolean     @default(false)
+  isFavorite     Boolean     @default(false)
+  metadata       Json?
+  createdAt      DateTime    @default(now())
+
+  user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  collectionId String?
+  collection   Collection? @relation(fields: [collectionId], references: [id])
+
+  @@index([userId])
+  @@index([createdAt])
+  @@map("images")
+}
+
+// Transacciones de créditos
+model Transaction {
+  id          String          @id @default(uuid())
+  userId      String
+  type        TransactionType
+  amount      Int
+  description String?
+  referenceId String?
+  createdAt   DateTime        @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([createdAt])
+  @@map("transactions")
+}
+
+// Paquetes de créditos para comprar
+model CreditPack {
+  id         String   @id @default(uuid())
+  name       String
+  credits    Int
+  price      Float
+  currency   String   @default("USD")
+  isActive   Boolean  @default(true)
+  isFeatured Boolean  @default(false)
+  createdAt  DateTime @default(now())
+
+  @@map("credit_packs")
+}
+
+// Colecciones/álbumes de imágenes
+model Collection {
+  id          String   @id @default(uuid())
+  userId      String
+  name        String
+  description String?
+  isPublic    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  images Image[]
+
+  @@index([userId])
+  @@map("collections")
+}
+
+// Planes de suscripción disponibles
+model Plan {
+  id              String   @id @default(uuid())
+  name            String   @unique
+  displayName     String
+  description     String?
+  price           Float
+  currency        String   @default("USD")
+  creditsPerMonth Int
+  maxImagesPerDay Int?
+  features        Json
+  isActive        Boolean  @default(true)
+  sortOrder       Int      @default(0)
+  createdAt       DateTime @default(now())
+
+  subscriptions Subscription[]
+
+  @@map("plans")
+}
+
+// Suscripción activa del usuario
+model Subscription {
+  id                   String             @id @default(uuid())
+  userId               String             @unique
+  planId               String
+  status               SubscriptionStatus @default(ACTIVE)
+  currentPeriodStart   DateTime
+  currentPeriodEnd     DateTime
+  cancelAtPeriodEnd    Boolean            @default(false)
+  stripeSubscriptionId String?            @unique
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plan Plan @relation(fields: [planId], references: [id])
+
+  @@index([userId])
+  @@index([status])
+  @@map("subscriptions")
+}
+
+// Afiliado/Revendedor
+model Affiliate {
+  id               String   @id @default(uuid())
+  userId           String   @unique
+  code             String   @unique // código único del afiliado
+  commissionRate   Float    @default(0.10) // 10% comisión
+  discountRate     Float    @default(0.10) // 10% descuento para referidos
+  totalEarnings    Float    @default(0)
+  pendingEarnings  Float    @default(0)
+  isActive         Boolean  @default(true)
+  paypalEmail      String?  // para pagos
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  referrals   User[]       @relation("ReferredUsers")
+  coupons     Coupon[]
+  commissions Commission[]
+
+  @@index([code])
+  @@map("affiliates")
+}
+
+// Cupones (sistema y afiliados)
+model Coupon {
+  id              String     @id @default(uuid())
+  code            String     @unique
+  type            CouponType
+  discountPercent Float      // porcentaje de descuento (0.10 = 10%)
+  discountAmount  Float?     // descuento fijo en USD (alternativo)
+  maxUses         Int?       // null = ilimitado
+  usedCount       Int        @default(0)
+  minPurchase     Float?     // compra mínima para aplicar
+  validFrom       DateTime   @default(now())
+  validUntil      DateTime?  // null = sin expiración
+  isActive        Boolean    @default(true)
+  affiliateId     String?    // null si es cupón del sistema
+  createdAt       DateTime   @default(now())
+
+  affiliate Affiliate?  @relation(fields: [affiliateId], references: [id], onDelete: Cascade)
+  uses      CouponUse[]
+
+  @@index([code])
+  @@index([affiliateId])
+  @@map("coupons")
+}
+
+// Registro de uso de cupones
+model CouponUse {
+  id            String   @id @default(uuid())
+  couponId      String
+  userId        String
+  transactionId String?  // referencia a la transacción de compra
+  discountApplied Float  // monto descontado
+  createdAt     DateTime @default(now())
+
+  coupon Coupon @relation(fields: [couponId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([couponId])
+  @@index([userId])
+  @@map("coupon_uses")
+}
+
+// Comisiones de afiliados
+model Commission {
+  id            String           @id @default(uuid())
+  affiliateId   String
+  transactionId String           // transacción que generó la comisión
+  amount        Float            // monto de la comisión
+  rate          Float            // tasa aplicada (ej: 0.10)
+  status        CommissionStatus @default(PENDING)
+  paidAt        DateTime?
+  createdAt     DateTime         @default(now())
+
+  affiliate Affiliate @relation(fields: [affiliateId], references: [id], onDelete: Cascade)
+
+  @@index([affiliateId])
+  @@index([status])
+  @@map("commissions")
+}
