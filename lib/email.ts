@@ -82,7 +82,7 @@ export async function sendVerificationEmail(
 
   if (resend) {
     await resend.emails.send({
-      from: "noreply@tudominio.com",
+      from: "noreply@geneaapp.com",
       to: email,
       subject,
       html,

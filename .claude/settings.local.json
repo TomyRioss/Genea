@@ -16,7 +16,8 @@
       "Bash(npx playwright test --list)",
       "Bash(echo.:*)",
       "Bash(npx tsc:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(npm i:*)"
     ]
   }
 }
