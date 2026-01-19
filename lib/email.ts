@@ -69,7 +69,7 @@ export async function sendVerificationEmail(
               <tr>
                 <td style="padding: 24px 40px; background-color: #f8fafc; border-radius: 0 0 16px 16px; border-top: 1px solid #e2e8f0;">
                   <p style="margin: 0; color: #94a3b8; font-size: 12px; text-align: center; line-height: 1.5;">Si no solicitaste este código, podés ignorar este email.</p>
-                  <p style="margin: 12px 0 0 0; color: #cbd5e1; font-size: 11px; text-align: center;">&copy; 2025 Genea. Todos los derechos reservados.</p>
+                  <p style="margin: 12px 0 0 0; color: #cbd5e1; font-size: 11px; text-align: center;">&copy; ${new Date().getFullYear()} Genea. Todos los derechos reservados.</p>
                 </td>
               </tr>
             </table>
