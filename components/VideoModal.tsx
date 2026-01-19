@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { X } from "lucide-react";
+import { FiVideo } from "react-icons/fi";
 
 interface VideoModalProps {
   isOpen: boolean;
@@ -44,13 +45,12 @@ export default function VideoModal({ isOpen, onClose, videoUrl }: VideoModalProp
           <X className="h-8 w-8" />
         </button>
 
-        <div className="aspect-video w-full overflow-hidden rounded-lg">
-          <iframe
-            src={videoUrl}
-            className="h-full w-full"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          />
+        <div className="flex aspect-video w-full items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-gray-900 to-gray-800">
+          <div className="text-center">
+            <FiVideo className="mx-auto mb-4 h-16 w-16 text-gray-500" />
+            <h2 className="text-3xl font-bold text-white">Próximamente demo</h2>
+            <p className="mt-2 text-gray-400">Estamos preparando algo increíble</p>
+          </div>
         </div>
       </div>
     </div>

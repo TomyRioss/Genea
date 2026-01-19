@@ -80,6 +80,8 @@
 - Accesibilidad (ARIA, semántica HTML5)
 - Performance: evitar re-renders innecesarios
 - SEO básico en estructura HTML
+- **NO usar emojis** - Evitar emojis en código, comentarios y respuestas
+- **NO usar SVG para iconos** - Usar react-icons en su lugar
 
 ## Investigación y Documentación (CRÍTICO)
 - **SIEMPRE buscar documentación oficial** antes de implementar o solucionar errores
