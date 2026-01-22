@@ -8,7 +8,6 @@ import ImageModal from "@/components/historial/ImageModal"
 
 interface ImageData {
   id: string
-  prompt: string
   imageUrl: string
   thumbnailUrl: string | null
   width: number
@@ -96,14 +95,13 @@ export default function HistorialPage() {
               >
                 <img
                   src={image.thumbnailUrl || image.imageUrl}
-                  alt={image.prompt}
+                  alt="Imagen generada"
                   className="h-full w-full object-cover"
                   loading="lazy"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
                 <div className="absolute bottom-0 left-0 right-0 p-3 opacity-0 transition-opacity group-hover:opacity-100">
-                  <p className="line-clamp-2 text-xs text-white">{image.prompt}</p>
-                  <p className="mt-1 text-xs text-gray-300">{formatDate(image.createdAt)}</p>
+                  <p className="text-xs text-white">{formatDate(image.createdAt)}</p>
                 </div>
               </button>
             ))}

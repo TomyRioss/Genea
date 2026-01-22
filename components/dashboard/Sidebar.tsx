@@ -20,12 +20,14 @@ import {
   X,
   LucideIcon,
 } from "lucide-react";
+import { PiSneaker } from "react-icons/pi";
+import { IconType } from "react-icons";
 
 interface SidebarItem {
   id: string;
   label: string;
   href: string;
-  icon: LucideIcon;
+  icon: LucideIcon | IconType;
   comingSoon?: boolean;
 }
 
@@ -50,6 +52,7 @@ const initialSections: SidebarSection[] = [
       { id: "prendas-separadas", label: "Prendas separadas", href: "/prendas-separadas", icon: Layers },
       { id: "prenda-unica", label: "Prenda única", href: "/prenda-unica", icon: Shirt },
       { id: "sin-modelo", label: "Sin modelo", href: "/sin-modelo", icon: UserX },
+      { id: "calzados", label: "Calzados", href: "/calzados", icon: PiSneaker },
     ],
   },
   {

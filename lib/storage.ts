@@ -1,4 +1,4 @@
-type BucketName = "sin-modelo" | "prenda-unica" | "prendas-separadas";
+type BucketName = "sin-modelo" | "prenda-unica" | "prendas-separadas" | "calzado";
 
 export async function uploadImage(
   bucket: BucketName,

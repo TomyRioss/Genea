@@ -48,7 +48,7 @@ export default function PlanesPage() {
   };
 
   return (
-    <div className="mx-auto max-w-4xl space-y-8">
+    <div className="mx-auto max-w-4xl space-y-8 px-4">
       <div className="text-center space-y-2">
         <h2 className="text-2xl font-semibold text-gray-900">Planes</h2>
         <p className="text-sm text-gray-500">Elegí el plan que mejor se adapte a tus necesidades</p>

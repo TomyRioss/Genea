@@ -17,7 +17,8 @@
       "Bash(echo.:*)",
       "Bash(npx tsc:*)",
       "Bash(find:*)",
-      "Bash(npm i:*)"
+      "Bash(npm i:*)",
+      "Bash(Remove-Item -Recurse -Force \"C:\\\\Users\\\\Pc\\\\Desktop\\\\geneaapp\\\\app\\\\api\\\\generate\\\\calzados\")"
     ]
   }
 }

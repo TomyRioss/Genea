@@ -57,7 +57,6 @@ export async function GET(request: Request) {
         take: limit,
         select: {
           id: true,
-          prompt: true,
           imageUrl: true,
           thumbnailUrl: true,
           width: true,

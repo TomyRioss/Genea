@@ -40,6 +40,13 @@ export default function Header({
       </div>
 
       <div className="flex items-center gap-2 md:gap-4">
+        <Link
+          href="/historial"
+          className="flex items-center gap-1.5 md:gap-2 text-sm text-gray-600 hover:text-gray-900 transition-colors"
+        >
+          <History className="h-4 w-4" />
+          <span>Historial</span>
+        </Link>
         <Popover>
           <PopoverTrigger asChild>
             <button className="flex items-center gap-1.5 md:gap-2 rounded-full bg-gray-200 px-3 md:px-5 py-2 md:py-2.5 text-xs md:text-sm font-medium text-gray-900 transition-colors hover:bg-gray-300">
@@ -75,13 +82,6 @@ export default function Header({
           </PopoverTrigger>
           <PopoverContent align="end" className="w-48 p-2">
             <div className="flex flex-col">
-              <Link
-                href="/historial"
-                className="flex items-center gap-3 rounded-md px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              >
-                <History className="h-4 w-4" />
-                Historial
-              </Link>
               <Link
                 href={hasActiveSubscription ? "/mi-suscripcion" : "/planes"}
                 className="flex items-center gap-3 rounded-md px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"

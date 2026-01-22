@@ -7,7 +7,7 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
-type BucketName = "sin-modelo" | "prenda-unica" | "prendas-separadas";
+type BucketName = "sin-modelo" | "prenda-unica" | "prendas-separadas" | "calzado";
 
 export async function POST(req: NextRequest) {
   try {
@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
     const buffer = Buffer.from(arrayBuffer);
 
     const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.jpg`;
-    const path = `upload/${session.user.id}/${fileName}`;
+    const path = `upload/${fileName}`;
 
     const { error } = await supabase.storage
       .from(bucket)

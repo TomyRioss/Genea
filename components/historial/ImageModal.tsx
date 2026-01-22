@@ -1,12 +1,12 @@
 "use client"
 
-import { X, Download, Share2, Calendar } from "lucide-react"
+import { useEffect } from "react"
+import { X, Download, Share2, Calendar, Image as ImageIcon } from "lucide-react"
 import { format } from "date-fns"
 import { es } from "date-fns/locale"
 
 interface ImageData {
   id: string
-  prompt: string
   imageUrl: string
   width: number
   height: number
@@ -20,6 +20,18 @@ interface ImageModalProps {
 }
 
 export default function ImageModal({ image, onClose }: ImageModalProps) {
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose()
+    }
+    document.addEventListener("keydown", handleEscape)
+    document.body.style.overflow = "hidden"
+    return () => {
+      document.removeEventListener("keydown", handleEscape)
+      document.body.style.overflow = "unset"
+    }
+  }, [onClose])
+
   if (!image) return null
 
   const handleDownload = async () => {
@@ -41,8 +53,7 @@ export default function ImageModal({ image, onClose }: ImageModalProps) {
 
   const handleShare = async () => {
     const shareData = {
-      title: "Imagen generada con GENEA",
-      text: image.prompt,
+      title: "Imagen generada con Genea",
       url: image.imageUrl,
     }
 
@@ -66,59 +77,62 @@ export default function ImageModal({ image, onClose }: ImageModalProps) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 backdrop-blur-sm"
       onClick={onClose}
     >
       <div
-        className="relative flex max-h-[90vh] w-full max-w-4xl flex-col overflow-hidden rounded-lg bg-white"
+        className="relative flex max-h-[90vh] w-full max-w-3xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between border-b border-gray-200 px-4 py-3">
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 text-sm text-gray-500">
-              <Calendar className="h-4 w-4" />
-              {formattedDate}
+        <div className="flex items-center justify-between bg-gray-50 px-6 py-4">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-200">
+              <ImageIcon className="h-5 w-5 text-gray-600" />
+            </div>
+            <div>
+              <p className="text-sm font-medium text-gray-900">Imagen generada</p>
+              <div className="flex items-center gap-1 text-xs text-gray-500">
+                <Calendar className="h-3 w-3" />
+                {formattedDate}
+              </div>
             </div>
           </div>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={handleDownload}
-              className="flex items-center gap-2 rounded-md bg-gray-100 px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-200"
-            >
-              <Download className="h-4 w-4" />
-              Descargar
-            </button>
+          <button
+            onClick={onClose}
+            className="rounded-full p-2 text-gray-400 transition-colors hover:bg-gray-200 hover:text-gray-600"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+
+        <div className="flex-1 overflow-auto bg-gray-900 p-6">
+          <img
+            src={image.imageUrl}
+            alt="Imagen generada"
+            className="mx-auto max-h-[55vh] rounded-lg object-contain shadow-lg"
+          />
+        </div>
+
+        <div className="flex items-center justify-between bg-gray-50 px-6 py-4">
+          <p className="text-sm text-gray-500">
+            {image.width} × {image.height}px
+          </p>
+          <div className="flex items-center gap-3">
             <button
               onClick={handleShare}
-              className="flex items-center gap-2 rounded-md bg-gray-100 px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-200"
+              className="flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50"
             >
               <Share2 className="h-4 w-4" />
               Compartir
             </button>
             <button
-              onClick={onClose}
-              className="rounded-md p-2 text-gray-500 transition-colors hover:bg-gray-100"
+              onClick={handleDownload}
+              className="flex items-center gap-2 rounded-lg bg-gray-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-gray-800"
             >
-              <X className="h-5 w-5" />
+              <Download className="h-4 w-4" />
+              Descargar
             </button>
           </div>
-        </div>
-
-        <div className="flex-1 overflow-auto bg-gray-100 p-4">
-          <img
-            src={image.imageUrl}
-            alt={image.prompt}
-            className="mx-auto max-h-[60vh] rounded-lg object-contain"
-          />
-        </div>
-
-        <div className="border-t border-gray-200 px-4 py-3">
-          <p className="text-sm text-gray-600">
-            <span className="font-medium text-gray-900">Prompt:</span> {image.prompt}
-          </p>
-          <p className="mt-1 text-xs text-gray-400">
-            {image.width} × {image.height}px
-          </p>
         </div>
       </div>
     </div>
