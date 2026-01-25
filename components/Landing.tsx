@@ -40,6 +40,9 @@ export default function Landing() {
         <p className="mb-8 max-w-4xl text-3xl font-medium text-white md:text-4xl lg:text-6xl">
           Tú modelo en segundos, el más económico en el mercado.
         </p>
+        <p className="mb-4 text-xl font-semibold text-white md:text-2xl">
+          Registrate y obten creditos gratis
+        </p>
         <div className="flex flex-col gap-4 sm:flex-row">
           <Link
             href="/register"
