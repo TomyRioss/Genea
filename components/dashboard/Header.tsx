@@ -72,7 +72,7 @@ export default function Header({
           <PopoverTrigger asChild>
             <button className="h-9 w-9 md:h-10 md:w-10 overflow-hidden rounded-full bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2">
               {avatarUrl ? (
-                <img src={avatarUrl} alt="Avatar" className="h-full w-full object-cover" />
+                <img src={avatarUrl} alt="Avatar" referrerPolicy="no-referrer" className="h-full w-full object-cover" />
               ) : (
                 <div className="flex h-full w-full items-center justify-center bg-gray-700 text-sm md:text-base font-medium text-white">
                   {initials}

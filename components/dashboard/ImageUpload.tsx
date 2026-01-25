@@ -5,9 +5,10 @@ import { Upload, X } from "lucide-react";
 
 interface ImageUploadProps {
   onImageSelect?: (file: File) => void;
+  disabled?: boolean;
 }
 
-export default function ImageUpload({ onImageSelect }: ImageUploadProps) {
+export default function ImageUpload({ onImageSelect, disabled }: ImageUploadProps) {
   const [preview, setPreview] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
 
@@ -39,6 +40,14 @@ export default function ImageUpload({ onImageSelect }: ImageUploadProps) {
   };
 
   const clearImage = () => setPreview(null);
+
+  if (disabled) {
+    return (
+      <div className="relative flex min-h-[300px] flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-200 bg-gray-50">
+        <span className="text-sm text-gray-400">La IA generará esta prenda</span>
+      </div>
+    );
+  }
 
   return (
     <div

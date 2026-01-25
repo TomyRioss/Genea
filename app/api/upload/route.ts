@@ -7,7 +7,7 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
-type BucketName = "sin-modelo" | "prenda-unica" | "prendas-separadas" | "calzado";
+type BucketName = "sin-modelo" | "prenda-unica" | "prendas-separadas" | "calzado" | "backgrounds";
 
 export async function POST(req: NextRequest) {
   try {
@@ -19,6 +19,7 @@ export async function POST(req: NextRequest) {
     const formData = await req.formData();
     const file = formData.get("file") as File;
     const bucket = formData.get("bucket") as BucketName;
+    const folder = formData.get("folder") as string | null;
 
     if (!file || !bucket) {
       return NextResponse.json({ error: "Faltan parámetros" }, { status: 400 });
@@ -28,7 +29,7 @@ export async function POST(req: NextRequest) {
     const buffer = Buffer.from(arrayBuffer);
 
     const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.jpg`;
-    const path = `upload/${fileName}`;
+    const path = folder ? `${folder}/${fileName}` : `upload/${fileName}`;
 
     const { error } = await supabase.storage
       .from(bucket)

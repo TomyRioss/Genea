@@ -74,7 +74,7 @@ export async function POST(req: NextRequest) {
         email,
         password: hashedPassword,
         name: name || null,
-        credits: 100,
+        credits: 450,
         verificationCode,
         verificationCodeExpires,
       },

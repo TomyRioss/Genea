@@ -29,6 +29,7 @@ interface SidebarItem {
   href: string;
   icon: LucideIcon | IconType;
   comingSoon?: boolean;
+  comingSoonText?: string;
 }
 
 interface SidebarSection {
@@ -53,6 +54,7 @@ const initialSections: SidebarSection[] = [
       { id: "prenda-unica", label: "Prenda única", href: "/prenda-unica", icon: Shirt },
       { id: "sin-modelo", label: "Sin modelo", href: "/sin-modelo", icon: UserX },
       { id: "calzados", label: "Calzados", href: "/calzados", icon: PiSneaker },
+      { id: "crear-anuncio-indumentaria", label: "Crear anuncio", href: "/crear-anuncio-indumentaria", icon: Megaphone, comingSoon: true, comingSoonText: "Muy pronto..." },
     ],
   },
   {
@@ -135,7 +137,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                         <item.icon className="h-4 w-4 text-gray-300" />
                         {item.label}
                       </div>
-                      <span className="text-[10px] text-gray-300">Próximamente</span>
+                      <span className="text-[10px] text-gray-300">{item.comingSoonText || "Próximamente"}</span>
                     </div>
                   );
                 }

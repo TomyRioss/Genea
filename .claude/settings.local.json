@@ -18,7 +18,12 @@
       "Bash(npx tsc:*)",
       "Bash(find:*)",
       "Bash(npm i:*)",
-      "Bash(Remove-Item -Recurse -Force \"C:\\\\Users\\\\Pc\\\\Desktop\\\\geneaapp\\\\app\\\\api\\\\generate\\\\calzados\")"
+      "Bash(Remove-Item -Recurse -Force \"C:\\\\Users\\\\Pc\\\\Desktop\\\\geneaapp\\\\app\\\\api\\\\generate\\\\calzados\")",
+      "Bash(wc:*)",
+      "Bash(dir \"C:\\\\Users\\\\Pc\\\\Desktop\\\\geneaapp\\\\public\")",
+      "Bash(dir:*)",
+      "Bash(curl:*)",
+      "WebFetch(domain:hnvazssrikitqtpmvqzj.supabase.co)"
     ]
   }
 }

@@ -1,8 +1,8 @@
-type BucketName = "sin-modelo" | "prenda-unica" | "prendas-separadas" | "calzado";
+type BucketName = "sin-modelo" | "prenda-unica" | "prendas-separadas" | "calzado" | "anuncios" | "backgrounds";
 
 export async function uploadImage(
   bucket: BucketName,
-  _folder: "upload" | "generated",
+  folder: "upload" | "generated" | "accessories" | "custom-model" | "custom-background",
   _userId: string,
   file: File | Blob
 ): Promise<string | null> {
@@ -10,6 +10,7 @@ export async function uploadImage(
     const formData = new FormData();
     formData.append("file", file);
     formData.append("bucket", bucket);
+    formData.append("folder", folder);
 
     const response = await fetch("/api/upload", {
       method: "POST",
