@@ -108,6 +108,18 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
 
   const sidebarContent = (
     <nav className="p-3">
+      <Link
+        href="/historial"
+        onClick={handleLinkClick}
+        className={`mb-4 flex w-full items-center gap-2 rounded px-1 py-1.5 text-sm transition-colors ${
+          pathname === "/historial"
+            ? "bg-gray-100 text-gray-900"
+            : "text-gray-500 hover:bg-gray-50 hover:text-gray-700"
+        }`}
+      >
+        <Image className={`h-4 w-4 ${pathname === "/historial" ? "text-gray-900" : "text-gray-400"}`} />
+        Historial
+      </Link>
       {sections.map((section) => (
         <div key={section.id} className="mb-4">
           <button

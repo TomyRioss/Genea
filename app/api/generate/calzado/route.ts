@@ -12,7 +12,7 @@ const getRandomPose = () => {
 
 export async function POST(req: NextRequest) {
   try {
-    const { images, description, gender } = await req.json();
+    const { images, description, gender, size } = await req.json();
 
     const prompt = `${gender} legs from knee down wearing this shoes ${description || ''}, editorial footwear photography, ${getRandomPose()}, soft diffused lighting, beige seamless background, fashion campaign style`;
 
@@ -29,6 +29,7 @@ export async function POST(req: NextRequest) {
           enable_sync_mode: false,
           images,
           prompt,
+          ...(size && { size }),
         }),
       },
     );

@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { uploadImage } from '@/lib/storage';
-import { Plus, Ban } from 'lucide-react';
+import { Plus, Ban, ChevronDown } from 'lucide-react';
 import {
   ImagePreviewModal,
   NoCreditsDialog,
@@ -22,6 +22,7 @@ import {
   generationTips,
   bodyTypeMap,
   posesByBackground,
+  sizeOptions,
 } from '@/lib/constants/generation';
 
 export default function PrendaUnicaPage() {
@@ -41,6 +42,10 @@ export default function PrendaUnicaPage() {
   const [age, setAge] = useState<'kid' | 'young' | 'adult'>('young');
   const [bodyType, setBodyType] = useState('regular');
   const [imageCount, setImageCount] = useState(1);
+  const [showAdvanced, setShowAdvanced] = useState(false);
+  const [selectedSize, setSelectedSize] = useState('1408*1408');
+  const [customWidth, setCustomWidth] = useState(1408);
+  const [customHeight, setCustomHeight] = useState(1408);
   const [generating, setGenerating] = useState(false);
   const [elapsedTime, setElapsedTime] = useState(0);
   const [currentTip, setCurrentTip] = useState(0);
@@ -119,6 +124,7 @@ export default function PrendaUnicaPage() {
         customModelUrl,
         customBackgroundMode,
         customBackgroundUrl,
+        size: selectedSize,
       }),
     });
     const data = await response.json();
@@ -278,6 +284,10 @@ export default function PrendaUnicaPage() {
           <span className={`text-sm ${gender === 'male' ? 'font-medium text-gray-900' : 'text-gray-500'}`}>Hombre</span>
         </div>
         <div className="flex gap-2 md:gap-3 overflow-x-auto pb-2">
+          <button onClick={() => setSelectedModel('custom')} className={`relative flex h-32 w-24 md:h-40 md:w-32 flex-shrink-0 flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed transition-all ${selectedModel === 'custom' ? 'border-gray-900 bg-gray-100' : 'border-gray-300 hover:border-gray-400'}`}>
+            <Plus className="h-8 w-8 text-gray-500" />
+            <span className="text-sm font-medium text-gray-600">Personalizado</span>
+          </button>
           {modelOptions.map(model => {
             const imageFile = gender === 'male' && model.imageFileMale ? model.imageFileMale : model.imageFile;
             const imagePath = gender === 'male' ? `/models/male/${imageFile}` : `/models/${model.imageFile}`;
@@ -290,10 +300,6 @@ export default function PrendaUnicaPage() {
               </button>
             );
           })}
-          <button onClick={() => setSelectedModel('custom')} className={`relative flex h-32 w-24 md:h-40 md:w-32 flex-shrink-0 flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed transition-all ${selectedModel === 'custom' ? 'border-gray-900 bg-gray-100' : 'border-gray-300 hover:border-gray-400'}`}>
-            <Plus className="h-8 w-8 text-gray-500" />
-            <span className="text-sm font-medium text-gray-600">Personalizado</span>
-          </button>
         </div>
         {selectedModel === 'custom' && (
           <div className="mt-3 space-y-3">
@@ -403,6 +409,60 @@ export default function PrendaUnicaPage() {
             </button>
           ))}
         </div>
+      </div>
+
+      <div className="space-y-3">
+        <button
+          onClick={() => setShowAdvanced(!showAdvanced)}
+          className="flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
+        >
+          Configuración avanzada
+          <ChevronDown className={`h-4 w-4 transition-transform ${showAdvanced ? 'rotate-180' : ''}`} />
+        </button>
+        {showAdvanced && (
+          <div className="space-y-4">
+            <label className="text-xs text-gray-500">Resolución</label>
+            <div className="flex gap-2 overflow-x-auto">
+              {sizeOptions.map(option => (
+                <button
+                  key={option.id}
+                  onClick={() => { setSelectedSize(option.id); setCustomWidth(option.width); setCustomHeight(option.height); }}
+                  className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-sm font-medium transition-all whitespace-nowrap ${selectedSize === option.id ? 'border-gray-900 bg-gray-900 text-white' : 'border-gray-300 bg-white text-gray-700 hover:border-gray-400'}`}
+                >
+                  <svg width="16" height="16" viewBox="0 0 16 16" className="flex-shrink-0">
+                    {option.width === option.height ? (
+                      <rect x="2" y="2" width="12" height="12" rx="1" fill="none" stroke="currentColor" strokeWidth="1.5" />
+                    ) : option.width > option.height ? (
+                      <rect x="1" y="4" width="14" height="8" rx="1" fill="none" stroke="currentColor" strokeWidth="1.5" />
+                    ) : (
+                      <rect x="4" y="1" width="8" height="14" rx="1" fill="none" stroke="currentColor" strokeWidth="1.5" />
+                    )}
+                  </svg>
+                  {option.label}
+                </button>
+              ))}
+              <button
+                onClick={() => setSelectedSize(`${customWidth}*${customHeight}`)}
+                className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-sm font-medium transition-all whitespace-nowrap ${!sizeOptions.some(o => o.id === selectedSize) ? 'border-gray-900 bg-gray-900 text-white' : 'border-gray-300 bg-white text-gray-700 hover:border-gray-400'}`}
+              >
+                Personalizado
+              </button>
+            </div>
+            <div className="space-y-3">
+              <div className="flex items-center gap-3">
+                <label className="text-sm text-gray-600 w-12">Width</label>
+                <input type="range" min={1024} max={4096} step={8} value={customWidth} onChange={e => { const v = Number(e.target.value); setCustomWidth(v); setSelectedSize(`${v}*${customHeight}`); }} className="flex-1 accent-gray-900" />
+                <input type="number" min={1024} max={4096} value={customWidth} onChange={e => { const v = Math.min(4096, Math.max(1024, Number(e.target.value))); setCustomWidth(v); setSelectedSize(`${v}*${customHeight}`); }} className="w-20 rounded-lg border border-gray-300 px-2 py-1 text-sm text-right" />
+              </div>
+              <div className="flex items-center gap-3">
+                <label className="text-sm text-gray-600 w-12">Height</label>
+                <input type="range" min={1024} max={4096} step={8} value={customHeight} onChange={e => { const v = Number(e.target.value); setCustomHeight(v); setSelectedSize(`${customWidth}*${v}`); }} className="flex-1 accent-gray-900" />
+                <input type="number" min={1024} max={4096} value={customHeight} onChange={e => { const v = Math.min(4096, Math.max(1024, Number(e.target.value))); setCustomHeight(v); setSelectedSize(`${customWidth}*${v}`); }} className="w-20 rounded-lg border border-gray-300 px-2 py-1 text-sm text-right" />
+              </div>
+              <p className="text-xs text-gray-400">{customWidth} x {customHeight} px &middot; Rango: 1024 - 4096</p>
+            </div>
+          </div>
+        )}
       </div>
 
       {generating ? (

@@ -59,6 +59,12 @@ export const bodyTypeOptions = [
   { value: 'curvy', label: 'Curvy', image: '/models/talle/curvy.jpeg' },
 ];
 
+export const sizeOptions = [
+  { id: '1408*1408', label: 'Cuadrado (1:1)', width: 1408, height: 1408 },
+  { id: '1088*1920', label: 'TikTok / Stories (9:16)', width: 1088, height: 1920 },
+  { id: '1920*1088', label: 'Desktop (16:9)', width: 1920, height: 1088 },
+];
+
 export const generationTips = [
   'Añadí descripciones para mejorar la calidad',
   'Utiliza fotos claras para detectar el tipo de ropa mejor',
@@ -86,6 +92,7 @@ export const poseToSupabaseFile: Record<string, Record<string, string>> = {
     apoyada: 'natureapoyada.jpeg',
   },
   playa: {
+    parada: 'beach.jpeg',
     sentada: 'beachsentada.jpeg',
     espaldas: 'beachespalda.jpeg',
   },
@@ -128,6 +135,7 @@ export const posesByBackground: Record<string, { id: string; label: string; labe
     { id: 'apoyada', label: 'Apoyada', labelEn: 'leaning against a tree', image: '/backgrounds/naturaleza/natureapoyada.jpeg' },
   ],
   playa: [
+    { id: 'parada', label: 'Parada', labelEn: 'standing', image: '/backgrounds/playa/beachparada.jpeg' },
     { id: 'sentada', label: 'Sentada', labelEn: 'sitting on the sand', image: '/backgrounds/playa/beachsentada.jpeg' },
     { id: 'espaldas', label: 'De espaldas', labelEn: 'back view', image: '/backgrounds/playa/beachespalda.jpeg' },
   ],

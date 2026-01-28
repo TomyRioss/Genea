@@ -42,7 +42,7 @@ const freePlan = {
 };
 
 export default function PlanesPage() {
-  const [currency, setCurrency] = useState<"USD" | "ARS">("USD");
+  const [currency, setCurrency] = useState<"USD" | "ARS">("ARS");
   const { plan: userPlan, isFreePlan, isLoading } = useUserPlan();
 
   const isCurrentPlan = (planName: string) => {

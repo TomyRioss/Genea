@@ -1,31 +1,46 @@
 "use client";
 
 import { useState } from 'react';
-import dynamic from 'next/dynamic';
+import Image from 'next/image';
 import Link from 'next/link';
+import { FaWhatsapp } from 'react-icons/fa';
 import GradientText from '@/components/GradientText';
 import VideoModal from '@/components/VideoModal';
 
-const Balatro = dynamic(() => import('@/components/Balatro'), {
-  ssr: false
-});
+const bgImages = [
+  '/backgrounds/urbano/urbancasual.jpeg',
+  '/backgrounds/naturaleza/natureparada.jpeg',
+  '/backgrounds/urbano/urbanparada.jpeg',
+  '/backgrounds/playa/beachparada.jpeg',
+  '/backgrounds/resort/resortparada.jpeg',
+  '/backgrounds/supermercado/supermercadoparada.jpeg',
+  '/backgrounds/nature.jpeg',
+  '/backgrounds/resort/resortdinner.jpeg',
+  '/backgrounds/urban.jpeg',
+];
 
 export default function Landing() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <div className="relative min-h-screen w-full overflow-hidden">
-      {/* Fondo */}
-      <div className="absolute inset-0 z-0">
-        <Balatro
-          isRotate={false}
-          mouseInteraction
-          pixelFilter={470}
-          color1="#2563EB"
-          color2="#1E3A5F"
-          color3="#0f172a"
-        />
+      {/* Fondo - Grilla de imagenes */}
+      <div className="absolute inset-0 z-0 grid grid-cols-3 grid-rows-3">
+        {bgImages.map((src, i) => (
+          <div key={i} className="relative overflow-hidden">
+            <Image
+              src={src}
+              alt=""
+              fill
+              className="object-cover"
+              sizes="33vw"
+              priority={i < 3}
+            />
+          </div>
+        ))}
       </div>
+      {/* Overlay oscuro difuminado */}
+      <div className="absolute inset-0 z-[1] bg-black/40" />
 
       {/* Contenido */}
       <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-4 text-center">
@@ -48,7 +63,7 @@ export default function Landing() {
             href="/register"
             className="rounded-full bg-black px-12 py-4 text-lg font-semibold text-white transition-colors hover:bg-gray-900 md:px-16 md:py-5 md:text-xl"
           >
-            Registrarme
+            Crea tú modelo (GRATIS)
           </Link>
           <button
             onClick={() => setIsModalOpen(true)}
@@ -61,6 +76,16 @@ export default function Landing() {
           </button>
         </div>
       </div>
+
+      {/* WhatsApp */}
+      <a
+        href="https://wa.me/5491134083140"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="fixed bottom-10 right-6 z-50 flex h-16 w-16 items-center justify-center rounded-full bg-green-500 text-white shadow-2xl transition-transform hover:scale-110"
+      >
+        <FaWhatsapp className="h-10 w-10" />
+      </a>
 
       <VideoModal
         isOpen={isModalOpen}

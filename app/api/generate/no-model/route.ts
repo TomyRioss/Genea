@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
   try {
-    const { images, description } = await req.json();
+    const { images, description, size } = await req.json();
 
     const prompt = `Make this garment${description ? ` ${description}` : ''} floating without model in a beige background`;
 
@@ -19,6 +19,7 @@ export async function POST(req: NextRequest) {
           enable_sync_mode: false,
           images,
           prompt,
+          ...(size && { size }),
         }),
       },
     );

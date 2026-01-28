@@ -82,7 +82,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
               name: user.name,
               avatarUrl: user.image,
               emailVerified: new Date(),
-              credits: 450,
+              credits: 200,
             },
           })
         } else if (!existingUser.emailVerified) {

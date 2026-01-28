@@ -22,6 +22,7 @@ export async function POST(req: NextRequest) {
       customModelUrl,
       customBackgroundMode,
       customBackgroundUrl,
+      size,
     } = await req.json();
 
     const genderText = gender === 'female' ? 'woman' : gender || 'woman';
@@ -168,6 +169,7 @@ export async function POST(req: NextRequest) {
           enable_sync_mode: false,
           images: allImages,
           prompt,
+          ...(size && { size }),
         }),
       },
     );

@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { Crown, History, LogOut, Menu, MessageCircle, Plus, Sparkles, Wallet } from "lucide-react";
+import { Crown, LogOut, Menu, MessageCircle, Plus, Sparkles, Wallet } from "lucide-react";
+import { FaWhatsapp } from "react-icons/fa";
 import {
   Popover,
   PopoverContent,
@@ -40,13 +41,15 @@ export default function Header({
       </div>
 
       <div className="flex items-center gap-2 md:gap-4">
-        <Link
-          href="/historial"
-          className="flex items-center gap-1.5 md:gap-2 text-sm text-gray-600 hover:text-gray-900 transition-colors"
+        <a
+          href="https://wa.me/5491134083140"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-1.5 md:gap-2 text-base md:text-lg font-medium text-gray-600 hover:text-gray-900 transition-colors"
         >
-          <History className="h-4 w-4" />
-          <span>Historial</span>
-        </Link>
+          <FaWhatsapp className="h-5 w-5 md:h-6 md:w-6" />
+          <span>Soporte</span>
+        </a>
         <Popover>
           <PopoverTrigger asChild>
             <button className="flex items-center gap-1.5 md:gap-2 rounded-full bg-gray-200 px-3 md:px-5 py-2 md:py-2.5 text-xs md:text-sm font-medium text-gray-900 transition-colors hover:bg-gray-300">
