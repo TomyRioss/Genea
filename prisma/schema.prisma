@@ -12,6 +12,9 @@ enum Role {
   USER
   ADMIN
   MODERATOR
+  PRO
+  PRO_PLUS
+  BUSINESS
 }
 
 // Estado de transacciones

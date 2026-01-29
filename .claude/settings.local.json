@@ -24,7 +24,12 @@
       "Bash(dir:*)",
       "Bash(curl:*)",
       "WebFetch(domain:hnvazssrikitqtpmvqzj.supabase.co)",
-      "Bash(ls \"C:\\\\Users\\\\Pc\\\\Desktop\\\\geneaapp\\\\app\\\\\\(dashboard\\)\\\\dashboard\"\" 2>nul || echo \"Directory empty or does not exist \")"
+      "Bash(ls \"C:\\\\Users\\\\Pc\\\\Desktop\\\\geneaapp\\\\app\\\\\\(dashboard\\)\\\\dashboard\"\" 2>nul || echo \"Directory empty or does not exist \")",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)",
+      "Bash(taskkill:*)",
+      "Bash(cmd /c \"taskkill /PID 71844 /F\")",
+      "Bash(powershell:*)"
     ]
   }
 }

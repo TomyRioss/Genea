@@ -14,12 +14,10 @@ export default function ImageUpload({ onImageSelect, disabled }: ImageUploadProp
 
   const handleFile = useCallback(
     (file: File) => {
-      if (file.type.startsWith("image/")) {
-        const reader = new FileReader();
-        reader.onload = (e) => setPreview(e.target?.result as string);
-        reader.readAsDataURL(file);
-        onImageSelect?.(file);
-      }
+      const reader = new FileReader();
+      reader.onload = (e) => setPreview(e.target?.result as string);
+      reader.readAsDataURL(file);
+      onImageSelect?.(file);
     },
     [onImageSelect]
   );
@@ -88,7 +86,7 @@ export default function ImageUpload({ onImageSelect, disabled }: ImageUploadProp
             type="file"
             accept="image/*"
             onChange={handleChange}
-            className="hidden"
+            className="sr-only"
           />
         </label>
       )}

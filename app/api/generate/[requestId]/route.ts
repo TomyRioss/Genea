@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { downloadAndUploadImage } from "@/lib/storage-server";
+import { auth } from "@/lib/auth";
 
 type BucketName = "sin-modelo" | "prenda-unica" | "prendas-separadas";
 
@@ -12,6 +13,9 @@ export async function GET(
     const { searchParams } = new URL(req.url);
     const bucket = searchParams.get("bucket") as BucketName | null;
     const userId = searchParams.get("userId");
+
+    const session = await auth();
+    const userRole = session?.user?.role;
 
     const response = await fetch(
       `https://api.wavespeed.ai/api/v3/predictions/${requestId}/result`,
@@ -33,7 +37,7 @@ export async function GET(
     // Si está completado y tenemos bucket/userId, guardar en Storage
     if (data.data?.status === "completed" && bucket && userId && outputs.length > 0) {
       const uploadedUrls = await Promise.all(
-        outputs.map((url: string) => downloadAndUploadImage(bucket, "generated", userId, url))
+        outputs.map((url: string) => downloadAndUploadImage(bucket, "generated", userId, url, userRole))
       );
       outputs = uploadedUrls.filter((url): url is string => url !== null);
     }
