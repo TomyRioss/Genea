@@ -51,7 +51,7 @@ export async function downloadAndUploadImage(
 
     const blob = await response.blob();
     const arrayBuffer = await blob.arrayBuffer();
-    let buffer = Buffer.from(arrayBuffer);
+    let buffer: Buffer = Buffer.from(arrayBuffer);
 
     if (userRole === "USER") {
       buffer = await applyWatermark(buffer);
