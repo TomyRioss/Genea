@@ -217,7 +217,98 @@ export default function DashboardPage() {
         <p className="text-sm text-gray-500">{users.length} usuarios registrados</p>
       </div>
 
-      <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white">
+      {/* Mobile: Cards */}
+      <div className="space-y-3 md:hidden">
+        {users.map(user => (
+          <div key={user.id} className="rounded-lg border border-gray-200 bg-white p-4">
+            <div className="flex items-start justify-between">
+              <div className="flex items-center gap-3">
+                <div className="h-10 w-10 flex-shrink-0 overflow-hidden rounded-full bg-gray-200">
+                  {user.avatarUrl ? (
+                    <img src={user.avatarUrl} alt="" referrerPolicy="no-referrer" className="h-full w-full object-cover" />
+                  ) : (
+                    <div className="flex h-full w-full items-center justify-center bg-gray-700 text-sm font-medium text-white">
+                      {user.name?.charAt(0).toUpperCase() || 'U'}
+                    </div>
+                  )}
+                </div>
+                <div className="min-w-0">
+                  {editingId === user.id ? (
+                    <input
+                      value={editValues.name}
+                      onChange={e => setEditValues(prev => ({ ...prev, name: e.target.value }))}
+                      className="w-full rounded border border-gray-300 px-2 py-1 text-sm"
+                    />
+                  ) : (
+                    <p className="truncate font-medium text-gray-900">{user.name || 'Sin nombre'}</p>
+                  )}
+                  <p className="truncate text-xs text-gray-500">{user.email}</p>
+                </div>
+              </div>
+              <span className={`flex-shrink-0 rounded-full px-2 py-0.5 text-xs font-medium ${
+                user.role === 'ADMIN' ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-700'
+              }`}>
+                {user.role}
+              </span>
+            </div>
+
+            {editingId === user.id ? (
+              <div className="mt-3 space-y-2">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-gray-500 w-16">Creditos</span>
+                  <input
+                    type="number"
+                    value={editValues.credits}
+                    onChange={e => setEditValues(prev => ({ ...prev, credits: Number(e.target.value) }))}
+                    className="flex-1 rounded border border-gray-300 px-2 py-1 text-sm"
+                  />
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-gray-500 w-16">Rol</span>
+                  <select
+                    value={editValues.role}
+                    onChange={e => setEditValues(prev => ({ ...prev, role: e.target.value }))}
+                    className="flex-1 rounded border border-gray-300 px-2 py-1 text-sm"
+                  >
+                    <option value="USER">USER</option>
+                    <option value="ADMIN">ADMIN</option>
+                    <option value="MODERATOR">MODERATOR</option>
+                  </select>
+                </div>
+                <div className="flex gap-2 pt-1">
+                  <button onClick={() => saveEdit(user.id)} className="flex-1 rounded-lg bg-gray-900 py-2 text-xs font-medium text-white">
+                    Guardar
+                  </button>
+                  <button onClick={cancelEdit} className="flex-1 rounded-lg border border-gray-300 py-2 text-xs font-medium text-gray-700">
+                    Cancelar
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="mt-3 flex items-center justify-between">
+                <div className="flex items-center gap-4 text-xs text-gray-500">
+                  <span>{user.credits} creditos</span>
+                  <span>{new Date(user.createdAt).toLocaleDateString('es-AR')}</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <button onClick={() => openGallery(user)} className="rounded p-2 text-gray-500 active:bg-gray-100">
+                    <Images className="h-5 w-5" />
+                  </button>
+                  <button onClick={() => startEdit(user)} className="rounded p-2 text-gray-500 active:bg-gray-100">
+                    <Pencil className="h-5 w-5" />
+                  </button>
+                  <button onClick={() => deleteUser(user.id)} className="rounded p-2 text-red-500 active:bg-red-50">
+                    <Trash2 className="h-5 w-5" />
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+
+      {/* Desktop: Table */}
+      <div className="hidden md:block overflow-x-auto rounded-lg border border-gray-200 bg-white">
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-gray-200 bg-gray-50">
