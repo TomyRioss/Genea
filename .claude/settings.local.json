@@ -23,7 +23,8 @@
       "Bash(dir \"C:\\\\Users\\\\Pc\\\\Desktop\\\\geneaapp\\\\public\")",
       "Bash(dir:*)",
       "Bash(curl:*)",
-      "WebFetch(domain:hnvazssrikitqtpmvqzj.supabase.co)"
+      "WebFetch(domain:hnvazssrikitqtpmvqzj.supabase.co)",
+      "Bash(ls \"C:\\\\Users\\\\Pc\\\\Desktop\\\\geneaapp\\\\app\\\\\\(dashboard\\)\\\\dashboard\"\" 2>nul || echo \"Directory empty or does not exist \")"
     ]
   }
 }

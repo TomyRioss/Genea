@@ -38,6 +38,7 @@ export default function DashboardLayout({
         credits={session.user?.credits ?? 0}
         avatarUrl={session.user?.image}
         userName={session.user?.name}
+        role={session.user?.role}
         onLogout={() => signOut({ callbackUrl: "/" })}
         onMenuClick={() => setSidebarOpen(true)}
       />

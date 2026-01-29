@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Crown, LogOut, Menu, MessageCircle, Plus, Sparkles, Wallet } from "lucide-react";
+import { Crown, LogOut, Menu, MessageCircle, Plus, Shield, Sparkles, Wallet } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
 import {
   Popover,
@@ -13,6 +13,7 @@ interface HeaderProps {
   credits?: number;
   avatarUrl?: string | null;
   userName?: string | null;
+  role?: string;
   hasActiveSubscription?: boolean;
   onLogout?: () => void;
   onMenuClick?: () => void;
@@ -22,6 +23,7 @@ export default function Header({
   credits = 0,
   avatarUrl,
   userName,
+  role,
   hasActiveSubscription = false,
   onLogout,
   onMenuClick,
@@ -101,6 +103,15 @@ export default function Header({
                   </>
                 )}
               </Link>
+              {role === "ADMIN" && (
+                <Link
+                  href="/dashboard"
+                  className="flex items-center gap-3 rounded-md px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                >
+                  <Shield className="h-4 w-4" />
+                  Panel administración
+                </Link>
+              )}
               <button
                 onClick={onLogout}
                 className="flex items-center gap-3 rounded-md px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"
